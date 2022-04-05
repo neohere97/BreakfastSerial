@@ -29,6 +29,8 @@ size_t cbfifo_enqueue(int buff_no,void *buf, size_t nbyte)
     {
         cb_buffer[buff_no][write_index[buff_no]++] = *data++;
     }
+
+    // for(int j = 0; j<7950;j++){};
     // type casting the number of bytes written
     return (size_t)i;
 }

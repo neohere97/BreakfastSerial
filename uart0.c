@@ -74,18 +74,23 @@ void UART0_Send_Blocking(const char *msg)
 
 int __sys_write(int handle, char *buf, int size)
 {
-    // UART0_Send_Blocking(buf);
-    cbfifo_enqueue(TX_CBFIFO, buf, size);
-    if (~(UART0->C2 & UART0_C2_TIE_MASK))
-        UART0->C2 |= UART_C2_TIE(1);
 
+    int count = 0,count2=0;   
+    while(size){
+        NVIC_DisableIRQ(UART0_IRQn);
+        count2 = cbfifo_enqueue(TX_CBFIFO, &buf[count], size);
+        NVIC_EnableIRQ(UART0_IRQn);
+         if (~(UART0->C2 & UART0_C2_TIE_MASK))
+        UART0->C2 |= UART_C2_TIE(1);
+        count += count2;       
+        size-=count2;        
+    }
     return 0;
 }
 
 int __sys_readc(void)
 {
-    uint8_t byte ;
-
+    uint8_t byte ;    
     if (cbfifo_dequeue(RX_CBFIFO, &byte, 1))
         return byte;
     else
@@ -94,6 +99,7 @@ int __sys_readc(void)
 
 void UART0_IRQHandler(void)
 {
+    NVIC_DisableIRQ(UART0_IRQn);
     uint8_t byte;
     const uint8_t error_flags = UART_S1_OR_MASK | UART_S1_NF_MASK |
                                 UART_S1_FE_MASK | UART_S1_PF_MASK;
@@ -124,4 +130,5 @@ void UART0_IRQHandler(void)
             UART0->C2 &= ~UART0_C2_TIE_MASK;
         }
     }
+    NVIC_EnableIRQ(UART0_IRQn);
 }

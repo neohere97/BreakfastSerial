@@ -102,3 +102,18 @@ int test_cbfifo(int buff_no)
 /*
 Below function is just for debugging, to dumpt the contents of the buffer to crosscheck
 */
+
+void run_fifo_tests(){
+  int cbfifo_res_rx = test_cbfifo(RX_CBFIFO);
+  int cbfifo_res_tx = test_cbfifo(TX_CBFIFO);
+
+
+  if (cbfifo_res_rx & cbfifo_res_tx)
+  {
+    printf("All test cases passed, both RX and TX Buffers \r\n");
+  }
+  else
+  {
+    printf("Some cases failed\n\r");
+  }
+}
