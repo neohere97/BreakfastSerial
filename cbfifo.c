@@ -3,21 +3,22 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include "MKL25Z4.h"
 #include "commons.h"
+#include "cbfifo.h"
 
 // These are the core buffer definitions, since the buffer is of fixed size
 // CB_SIZE has been statically defined to be 128 in commons.h
 
-
 uint8_t cb_buffer[2][CB_SIZE];
-uint8_t read_index[2] = {0,0};
-uint8_t write_index[2] = {0,0};
-uint8_t end_index[2] = {CB_SIZE,CB_SIZE};
-
+uint8_t read_index[2] = {0, 0};
+uint8_t write_index[2] = {0, 0};
+uint8_t end_index[2] = {CB_SIZE, CB_SIZE};
 
 // -------------------------------------------------------CB-FIFO-ENQUEUE-----------------------------------------------------------------------
-size_t cbfifo_enqueue(int buff_no,void *buf, size_t nbyte)
+size_t cbfifo_enqueue(int buff_no, void *buf, size_t nbyte)
 {
+    NVIC_DisableIRQ(UART0_IRQn);
     // checking if the input buffer data is null
     if (buf == NULL)
         return -1;
@@ -32,11 +33,13 @@ size_t cbfifo_enqueue(int buff_no,void *buf, size_t nbyte)
 
     // for(int j = 0; j<7950;j++){};
     // type casting the number of bytes written
+    NVIC_EnableIRQ(UART0_IRQn);
     return (size_t)i;
 }
 // -------------------------------------------------------CB-FIFO-DEQUEUE-----------------------------------------------------------------------
-size_t cbfifo_dequeue(int buff_no,void *buf, size_t nbyte)
+size_t cbfifo_dequeue(int buff_no, void *buf, size_t nbyte)
 {
+    NVIC_DisableIRQ(UART0_IRQn);
     // null buffer pointer check
     if (buf == NULL)
         return -1;
@@ -78,6 +81,7 @@ next_step:
     // resetting read index to 0 everytime since remaining elements are brought back to starting from the first location
     read_index[buff_no] = 0;
 
+    NVIC_EnableIRQ(UART0_IRQn);
     return (size_t)i;
 }
 // -------------------------------------------------------CB-FIFO-LENGTH---------------------------------------------------------------------

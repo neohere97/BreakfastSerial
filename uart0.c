@@ -52,16 +52,6 @@ void uart_init()
     NVIC_EnableIRQ(UART0_IRQn);
 }
 
-uint32_t UART0_Read_Nonblocking()
-{
-    while (1)
-    {
-        if (UART0->S1 & UART0_S1_RDRF_MASK)
-            return UART0->D;
-    }
-    //   return -1;
-}
-
 void UART0_Send_Blocking(const char *msg)
 {
     while (*msg)
@@ -75,31 +65,33 @@ void UART0_Send_Blocking(const char *msg)
 int __sys_write(int handle, char *buf, int size)
 {
 
-    int count = 0,count2=0;   
-    while(size){
-        NVIC_DisableIRQ(UART0_IRQn);
+    int count = 0, count2 = 0;
+    while (size)
+    {
+
         count2 = cbfifo_enqueue(TX_CBFIFO, &buf[count], size);
-        NVIC_EnableIRQ(UART0_IRQn);
-         if (~(UART0->C2 & UART0_C2_TIE_MASK))
-        UART0->C2 |= UART_C2_TIE(1);
-        count += count2;       
-        size-=count2;        
+
+        if (~(UART0->C2 & UART0_C2_TIE_MASK))
+            UART0->C2 |= UART_C2_TIE(1);
+        count += count2;
+        size -= count2;
     }
     return 0;
 }
 
 int __sys_readc(void)
 {
-    uint8_t byte ;    
+    uint8_t byte;
     if (cbfifo_dequeue(RX_CBFIFO, &byte, 1))
+    {
         return byte;
+    }
     else
         return 0;
 }
 
 void UART0_IRQHandler(void)
 {
-    NVIC_DisableIRQ(UART0_IRQn);
     uint8_t byte;
     const uint8_t error_flags = UART_S1_OR_MASK | UART_S1_NF_MASK |
                                 UART_S1_FE_MASK | UART_S1_PF_MASK;
@@ -114,7 +106,13 @@ void UART0_IRQHandler(void)
     if (UART0->S1 & UART0_S1_RDRF_MASK)
     { // byte ready to be read; enqueue it
         byte = UART0->D;
-        cbfifo_enqueue(RX_CBFIFO, &byte, 1);
+        cbfifo_enqueue(RX_CBFIFO, &byte, 1);      
+        putchar(byte);
+        if (byte == 0x8){            
+            putchar(0x20);
+            putchar(0x8);
+            
+        }
         // If there was no room on the FIFO, this byte just got silently
         // dropped. Whoops. Maybe we should increment an error counter?
     }
@@ -130,5 +128,4 @@ void UART0_IRQHandler(void)
             UART0->C2 &= ~UART0_C2_TIE_MASK;
         }
     }
-    NVIC_EnableIRQ(UART0_IRQn);
 }

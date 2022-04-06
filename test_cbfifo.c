@@ -108,12 +108,21 @@ void run_fifo_tests(){
   int cbfifo_res_tx = test_cbfifo(TX_CBFIFO);
 
 
-  if (cbfifo_res_rx & cbfifo_res_tx)
+  if (cbfifo_res_rx)
   {
-    printf("All test cases passed, both RX and TX Buffers \r\n");
+    printf("All test cases passed RX_CBFIFO\r\n");
   }
   else
   {
-    printf("Some cases failed\n\r");
+    printf("Some cases failed RX\n\r");
+  }
+
+  if (cbfifo_res_tx)
+  {
+    printf("All test cases passed TX_CBFIFO\r\n");
+  }
+  else
+  {
+    printf("Some cases failed TX\n\r");
   }
 }
