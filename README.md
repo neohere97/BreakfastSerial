@@ -25,6 +25,8 @@ This program implements a command processor with the following commands.
 If the DEBUG Flag is set, CBFIFO tests are run and
 the result is displayed before the command processor is called.
 
+SCREENSHOTS have been included in the repository.
+
 ## Extra Credit - Backspace
 
  - Backspace Key and extra white spaces has been handled as part of Extra Credit
