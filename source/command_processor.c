@@ -19,11 +19,14 @@
 #define SPACE 0x20
 #define BACKSPACE 0x8
 
-// Function Declarations
-void handle_author(int no_commands, char *command_list[]);
-void handle_hexdump(int no_commands, char *command_list[]);
-void handle_help(int no_commands, char *command_list[]);
+#define LINEBUFFER_LENGTH 100
 
+// Function Declarations
+static void handle_author(int no_commands, char *command_list[]);
+static void handle_hexdump(int no_commands, char *command_list[]);
+static void handle_help(int no_commands, char *command_list[]);
+static void process_command(char *input);
+static void line_accumulator(char line[]);
 
 // function pointer definitions
 typedef void (*command_handler_t)(int, char *command_list[]);
@@ -47,13 +50,31 @@ static const command_table_t commands[] = {
 static const int num_commands =
     sizeof(commands) / sizeof(command_table_t);
 
+// ------------------------------------------------start-command-processor----------------------------------------------------------
+/***********************************************************************************
+ * function : Starts the command processor
+ * parameters : none
+ * return : none
+ ***********************************************************************************/
+void start_command_processor(){
+  //Line buffer to hold line contents
+  char line[LINEBUFFER_LENGTH] = {""};
+
+  //Command processor loop
+  while (1)
+  {
+    printf("\n\r? ");
+    line_accumulator(line);
+    process_command(line);
+  }
+};
 // ------------------------------------------------line-accumulator-----------------------------------------------------------
 /***********************************************************************************
  * function : Gets one line of data from the terminal and handles white space and backspace
  * parameters : *line -> destination location to store final line data
  * return : none
  ***********************************************************************************/
-void line_accumulator(char *line)
+static void line_accumulator(char *line)
 {
   // index variable used to write to the buffer
   int i = 0;
@@ -117,7 +138,7 @@ getmorechars:
  * parameters : *input -> source line data accumulated by line accumulator
  * return : none
  ***********************************************************************************/
-void process_command(char *input)
+static void process_command(char *input)
 {
   char *p = input;
   char *end;
@@ -185,7 +206,7 @@ void process_command(char *input)
  *              command_list -> pointers to list of commands
  * return : none
  ***********************************************************************************/
-void handle_author(int no_commands, char *command_list[])
+static void handle_author(int no_commands, char *command_list[])
 {
   printf("\n\rChinmay Shalawadi\n\r");
 };
@@ -196,7 +217,7 @@ void handle_author(int no_commands, char *command_list[])
  *              command_list -> pointers to list of commands
  * return : none
  ***********************************************************************************/
-void handle_help(int no_commands, char *command_list[])
+static void handle_help(int no_commands, char *command_list[])
 {
   printf("\n\n\r  Commands Supported\n\n\r");
   for (int i = 0; i < num_commands; i++)
@@ -212,7 +233,7 @@ void handle_help(int no_commands, char *command_list[])
  *              command_list -> pointers to list of commands
  * return : none
  ***********************************************************************************/
-void handle_hexdump(int no_commands, char *command_list[])
+static void handle_hexdump(int no_commands, char *command_list[])
 {
   // storage for hexdump string which gets generated
   char hexdump_text[3200] = {""};

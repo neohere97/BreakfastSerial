@@ -7,18 +7,11 @@
  ***************************************************************************/
 #ifndef COMMAND_PROC
 
-#define LINEBUFFER_LENGTH 100
 /***********************************************************************************
- * function : Gets one line of data from the terminal and handles white space and backspace
- * parameters : *line -> destination location to store final line data
+ * function : Starts the command processor
+ * parameters : none
  * return : none
  ***********************************************************************************/
-void line_accumulator(char line[]);
-/***********************************************************************************
- * function : Parses the line into commands and calls the relevant command handler
- * parameters : *input -> source line data accumulated by line accumulator
- * return : none
- ***********************************************************************************/
-void process_command(char *input);
+void start_command_processor();
 
 #endif

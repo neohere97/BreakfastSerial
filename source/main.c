@@ -36,16 +36,8 @@ int main(void)
   run_fifo_tests();
   #endif
 
-  //Line buffer to hold line contents
-  char line[LINEBUFFER_LENGTH] = {""};
-
-  //Command processor loop
-  while (1)
-  {
-    printf("\n\r? ");
-    line_accumulator(line);
-    process_command(line);
-  }
+  start_command_processor();
+  
   return 0;
 }
 
