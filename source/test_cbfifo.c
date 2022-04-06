@@ -1,10 +1,18 @@
 
+/***************************************************************************
+ * Breakfast Serial
+ * Author: Chinmay Shalawadi
+ * Institution: University of Colorado Boulder
+ * Mail id: chsh1552@colorado.edu
+ * References: lecture slides & White Textbook
+ ***************************************************************************/
+
 #include "MKL25Z4.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include "cbfifo.h"
-#include "commons.h"
+
 
 // These static data is used to test the buffer and the results
 char *str_store = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*-,thequickbrownfoxjumpedoverthelazydogandthefoxatethedogbrutally";
@@ -22,15 +30,11 @@ extern uint8_t end_index;
 int test_cbfifo(int buff_no)
 {
 
-    // printf("Starting CBFIFO Tests...\n\n\r");    
-
     int passed_count = 0;
     int passed = 1;
 
     // Various test cases, queueing and dequeing cycles and length check.
 
-    // printf("Capacity of the  buffer is -> %lu \n\n\r", cbfifo_capacity());
-    // printf("Enqueueing 500 Bytes of Data, Bytes actually Queued");
     cbfifo_enqueue(buff_no, str_store, 500);
     if (cbfifo_length(buff_no) == 255)
         passed_count++;
@@ -94,19 +98,19 @@ int test_cbfifo(int buff_no)
     cbfifo_reset(TX_CBFIFO);  
     cbfifo_reset(RX_CBFIFO);  
 
-    // printf("CASES PASSED %d/10 \n \n\r", passed_count);
-
     return passed;
 }
 
-/*
-Below function is just for debugging, to dumpt the contents of the buffer to crosscheck
-*/
-
+// ------------------------------------------------run-fifo-tests------------------------------------------------------------
+/***********************************************************************************
+ * function : Funciton runs the RX and TX FIFO Tests and prints the result
+ * parameters : none
+ * return : none
+ ***********************************************************************************/
 void run_fifo_tests(){
+
   int cbfifo_res_rx = test_cbfifo(RX_CBFIFO);
   int cbfifo_res_tx = test_cbfifo(TX_CBFIFO);
-
 
   if (cbfifo_res_rx)
   {
@@ -126,3 +130,4 @@ void run_fifo_tests(){
     printf("Some cases failed TX\n\r");
   }
 }
+// ------------------------------------------------End------------------------------------------------------------
