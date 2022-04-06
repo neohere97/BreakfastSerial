@@ -7,6 +7,7 @@
  ***************************************************************************/
 #ifndef COMMAND_PROC
 
+#define LINEBUFFER_LENGTH 100
 /***********************************************************************************
  * function : Gets one line of data from the terminal and handles white space and backspace
  * parameters : *line -> destination location to store final line data
