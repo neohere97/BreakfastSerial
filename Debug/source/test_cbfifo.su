@@ -1,0 +1,2 @@
+../source/test_cbfifo.c:18:5:test_cbfifo	168	static
+../source/test_cbfifo.c:101:6:run_fifo_tests	16	static

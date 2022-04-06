@@ -13,22 +13,13 @@
 #include <string.h>
 #include "cbfifo.h"
 
-
-// These static data is used to test the buffer and the results
-char *str_store = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*-,thequickbrownfoxjumpedoverthelazydogandthefoxatethedogbrutally";
-char str[128] = {""};
-
-// The core buffer variables definied in the CB Buffer file,
-//  They are used here for testing purposes
-extern uint8_t cb_buffer[];
-extern uint8_t read_index;
-extern uint8_t write_index;
-extern uint8_t end_index;
-
 // ---------------------------------------------------------TEST-CBFIFO------------------------------------------------
 
 int test_cbfifo(int buff_no)
 {
+    // These static data is used to test the buffer and the results
+    char *str_store = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789*-,thequickbrownfoxjumpedoverthelazydogandthefoxatethedogbrutally";
+    char str[128] = {""};
 
     int passed_count = 0;
     int passed = 1;
@@ -95,8 +86,8 @@ int test_cbfifo(int buff_no)
     else
         passed = 0;
 
-    cbfifo_reset(TX_CBFIFO);  
-    cbfifo_reset(RX_CBFIFO);  
+    cbfifo_reset(TX_CBFIFO);
+    cbfifo_reset(RX_CBFIFO);
 
     return passed;
 }
@@ -107,27 +98,28 @@ int test_cbfifo(int buff_no)
  * parameters : none
  * return : none
  ***********************************************************************************/
-void run_fifo_tests(){
+void run_fifo_tests()
+{
 
-  int cbfifo_res_rx = test_cbfifo(RX_CBFIFO);
-  int cbfifo_res_tx = test_cbfifo(TX_CBFIFO);
+    int cbfifo_res_rx = test_cbfifo(RX_CBFIFO);
+    int cbfifo_res_tx = test_cbfifo(TX_CBFIFO);
 
-  if (cbfifo_res_rx)
-  {
-    printf("All test cases passed RX_CBFIFO\r\n");
-  }
-  else
-  {
-    printf("Some cases failed RX\n\r");
-  }
+    if (cbfifo_res_rx)
+    {
+        printf("All test cases passed RX_CBFIFO\r\n");
+    }
+    else
+    {
+        printf("Some cases failed RX\n\r");
+    }
 
-  if (cbfifo_res_tx)
-  {
-    printf("All test cases passed TX_CBFIFO\r\n");
-  }
-  else
-  {
-    printf("Some cases failed TX\n\r");
-  }
+    if (cbfifo_res_tx)
+    {
+        printf("All test cases passed TX_CBFIFO\r\n");
+    }
+    else
+    {
+        printf("Some cases failed TX\n\r");
+    }
 }
 // ------------------------------------------------End------------------------------------------------------------
