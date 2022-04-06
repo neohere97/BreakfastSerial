@@ -3,5 +3,3 @@
 ../source/command_processor.c:188:6:handle_author	16	static
 ../source/command_processor.c:199:6:handle_help	24	static
 ../source/command_processor.c:215:6:handle_hexdump	3232	static
-../source/command_processor.c:257:7:hexdump	272	static
-../source/command_processor.c:371:5:uint_to_hexstr	96	dynamic

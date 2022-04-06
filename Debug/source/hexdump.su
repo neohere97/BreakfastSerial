@@ -1,0 +1,2 @@
+../source/hexdump.c:29:7:hexdump	272	static
+../source/hexdump.c:143:12:uint_to_hexstr	96	dynamic
